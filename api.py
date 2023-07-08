@@ -1,7 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py
+#     formats: ipynb,py:light
 #     text_representation:
 #       extension: .py
 #       format_name: light
@@ -33,9 +33,13 @@ with open('./final_model/model.pkl', 'rb') as f:
 def scoring_endpoint(item:Individual = None):
     dico = item.dict()
     df = pd.DataFrame([dico.values()], columns= dico.keys())
-    pred = str(model.predict(df)[0])
-    return {"prediction" : pred}
+    pred = model.predict(df)[0]
+    if pred == 0:
+        return {"prediction" : 'Unable'}
+    if pred == 1:
+        return {"prediction" : 'Able'}
+
+
 
 # -
-
 

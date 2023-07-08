@@ -1,7 +1,7 @@
 # ---
 # jupyter:
 #   jupytext:
-#     formats: ipynb,py
+#     formats: ipynb,py:light
 #     text_representation:
 #       extension: .py
 #       format_name: light
@@ -78,7 +78,7 @@ class Individual(BaseModel):
     NAME_TYPE_SUITE_Group_of_people: float
     NAME_TYPE_SUITE_Other_A: float
     NAME_TYPE_SUITE_Other_B: float
-    NAME_TYPE_SUITE_Spouse__partner: float
+    NAME_TYPE_SUITE_Spouse_partner: float
     NAME_TYPE_SUITE_Unaccompanied: float
     NAME_INCOME_TYPE_Businessman: float
     NAME_INCOME_TYPE_Commercial_associate: float
@@ -200,7 +200,7 @@ class Individual(BaseModel):
     WALLSMATERIAL_MODE_Monolithic: float
     WALLSMATERIAL_MODE_Others: float
     WALLSMATERIAL_MODE_Panel: float
-    WALLSMATERIAL_MODE_Stone__brick: float
+    WALLSMATERIAL_MODE_Stone_brick: float
     WALLSMATERIAL_MODE_Wooden: float
     EMERGENCYSTATE_MODE_No: float
     EMERGENCYSTATE_MODE_Yes: float
@@ -297,7 +297,7 @@ class Individual(BaseModel):
     PREV_NAME_TYPE_SUITE_Group_of_people_MEAN: float
     PREV_NAME_TYPE_SUITE_Other_A_MEAN: float
     PREV_NAME_TYPE_SUITE_Other_B_MEAN: float
-    PREV_NAME_TYPE_SUITE_Spouse__partner_MEAN: float
+    PREV_NAME_TYPE_SUITE_Spouse_partner_MEAN: float
     PREV_NAME_TYPE_SUITE_Unaccompanied_MEAN: float
     PREV_NAME_CLIENT_TYPE_New_MEAN: float
     PREV_NAME_CLIENT_TYPE_Refreshed_MEAN: float

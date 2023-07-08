@@ -1,19 +1,20 @@
+utc_time_created: '2023-07-01 21:11:27.318957'
 flavors:
   python_function:
+    model_path: model.pkl
+    predict_fn: predict
+    loader_module: mlflow.sklearn
+    python_version: 3.9.13
     env:
       conda: conda.yaml
       virtualenv: python_env.yaml
-    loader_module: mlflow.sklearn
-    model_path: model.pkl
-    predict_fn: predict
-    python_version: 3.9.13
   sklearn:
-    code: null
     pickled_model: model.pkl
+    sklearn_version: 1.3.0
     serialization_format: cloudpickle
-    sklearn_version: 1.0.2
+    code: null
+model_uuid: 682bc7090cd5420f9bbc7dffbf973536
 mlflow_version: 2.4.0
-model_uuid: f6ac9c9a2e884ba1a7daa2b977888a84
 signature:
   inputs: '[{"type": "long", "name": "CODE_GENDER"}, {"type": "long", "name": "FLAG_OWN_CAR"},
     {"type": "long", "name": "FLAG_OWN_REALTY"}, {"type": "double", "name": "CNT_CHILDREN"},
@@ -49,8 +50,8 @@ signature:
     "name": "NAME_TYPE_SUITE_Children"}, {"type": "long", "name": "NAME_TYPE_SUITE_Family"},
     {"type": "long", "name": "NAME_TYPE_SUITE_Group_of_people"}, {"type": "long",
     "name": "NAME_TYPE_SUITE_Other_A"}, {"type": "long", "name": "NAME_TYPE_SUITE_Other_B"},
-    {"type": "long", "name": "NAME_TYPE_SUITE_Spouse__partner"}, {"type": "long",
-    "name": "NAME_TYPE_SUITE_Unaccompanied"}, {"type": "long", "name": "NAME_INCOME_TYPE_Businessman"},
+    {"type": "long", "name": "NAME_TYPE_SUITE_Spouse_partner"}, {"type": "long", "name":
+    "NAME_TYPE_SUITE_Unaccompanied"}, {"type": "long", "name": "NAME_INCOME_TYPE_Businessman"},
     {"type": "long", "name": "NAME_INCOME_TYPE_Commercial_associate"}, {"type": "long",
     "name": "NAME_INCOME_TYPE_Maternity_leave"}, {"type": "long", "name": "NAME_INCOME_TYPE_Pensioner"},
     {"type": "long", "name": "NAME_INCOME_TYPE_State_servant"}, {"type": "long", "name":
@@ -130,7 +131,7 @@ signature:
     {"type": "long", "name": "WALLSMATERIAL_MODE_Block"}, {"type": "long", "name":
     "WALLSMATERIAL_MODE_Mixed"}, {"type": "long", "name": "WALLSMATERIAL_MODE_Monolithic"},
     {"type": "long", "name": "WALLSMATERIAL_MODE_Others"}, {"type": "long", "name":
-    "WALLSMATERIAL_MODE_Panel"}, {"type": "long", "name": "WALLSMATERIAL_MODE_Stone__brick"},
+    "WALLSMATERIAL_MODE_Panel"}, {"type": "long", "name": "WALLSMATERIAL_MODE_Stone_brick"},
     {"type": "long", "name": "WALLSMATERIAL_MODE_Wooden"}, {"type": "long", "name":
     "EMERGENCYSTATE_MODE_No"}, {"type": "long", "name": "EMERGENCYSTATE_MODE_Yes"},
     {"type": "double", "name": "INCOME_CREDIT_PERC"}, {"type": "double", "name": "INCOME_PER_PERSON"},
@@ -205,7 +206,7 @@ signature:
     "name": "PREV_NAME_TYPE_SUITE_Children_MEAN"}, {"type": "double", "name": "PREV_NAME_TYPE_SUITE_Family_MEAN"},
     {"type": "double", "name": "PREV_NAME_TYPE_SUITE_Group_of_people_MEAN"}, {"type":
     "double", "name": "PREV_NAME_TYPE_SUITE_Other_A_MEAN"}, {"type": "double", "name":
-    "PREV_NAME_TYPE_SUITE_Other_B_MEAN"}, {"type": "double", "name": "PREV_NAME_TYPE_SUITE_Spouse__partner_MEAN"},
+    "PREV_NAME_TYPE_SUITE_Other_B_MEAN"}, {"type": "double", "name": "PREV_NAME_TYPE_SUITE_Spouse_partner_MEAN"},
     {"type": "double", "name": "PREV_NAME_TYPE_SUITE_Unaccompanied_MEAN"}, {"type":
     "double", "name": "PREV_NAME_CLIENT_TYPE_New_MEAN"}, {"type": "double", "name":
     "PREV_NAME_CLIENT_TYPE_Refreshed_MEAN"}, {"type": "double", "name": "PREV_NAME_CLIENT_TYPE_Repeater_MEAN"},
@@ -323,4 +324,3 @@ signature:
     "name": "INSTAL_DAYS_ENTRY_PAYMENT_MEAN"}, {"type": "double", "name": "INSTAL_DAYS_ENTRY_PAYMENT_SUM"},
     {"type": "double", "name": "INSTAL_COUNT"}]'
   outputs: '[{"type": "long", "name": "TARGET"}]'
-utc_time_created: '2023-06-28 00:26:49.465532'
