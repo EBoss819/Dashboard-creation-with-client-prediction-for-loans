@@ -41,6 +41,15 @@ import plotly.express as px
 sns.set_theme(style='darkgrid', palette='dark')
 
 # +
+# For the dashboard, we need multiple CSV :
+# data after featuring = the data from all clients we need to display on the dashboard
+# main info client = just some informations about the clients before scaling / one hot encoding
+# feature info = a short description of each features
+# mean std on columns = to go back from scaled value to original values using mean/std
+
+# We also need the explainer that is a bunch of graphics from dashexplainer from SHAP.
+# We will use their graphics with some changes that will be done in the following functions.
+
 df = pd.read_csv('data_after_featuring.csv.gz').drop(columns = ['Unnamed: 0'])
 df2 = pd.read_csv('main_info_client.csv').drop(columns = ['Unnamed: 0'])
 dff = pd.read_csv('features_info.csv').drop(columns = ['Unnamed: 0'])
@@ -48,7 +57,10 @@ feature_scale = pd.read_csv('mean_std_on_columns.csv').drop(columns = ['Unnamed:
 data_clean = df2.copy()
 data_clean = data_clean[[a for a in df2.columns if ((df2[a].dtype == 'float')|(df2[a].dtype == 'int64'))]]
 data_clean = data_clean.dropna(axis=0, how='any')
+explainer = ClassifierExplainer.from_file('explainer.joblib')
 
+
+# We will need similar clients in the dashboard. To find them, we will use a nearest neighbors with the clients main infos :
 
 scaler = preprocessing.StandardScaler()
 scaler.fit(data_clean[[a for a in df2.columns if (df2[a].dtype == 'float')]])
@@ -57,6 +69,16 @@ nei = NearestNeighbors(n_neighbors = 10)
 nei.fit(data_clean[[a for a in df2.columns if (df2[a].dtype == 'float')]])
 
 def find_similar_client(client_id):
+    """
+    The purpose of this function is to dispay a dataframe of similar clients from an unique client.
+    Parameter
+    ----------
+    client_id (int or string number) : the client id from "SK_CURR_ID" in data_after_featuring.csv
+    
+    Returns
+    ----------
+    return_df (pandas dataframe) : a dataframe with 10 clients sharing similar features
+    """
     client = data_clean.loc[data_clean['SK_ID_CURR'] == int(client_id)]
     similar_clients = nei.kneighbors(client.drop(columns = ['SK_ID_CURR', 'CNT_CHILDREN']))
     client_id_similar = list(data_clean.iloc[list(similar_clients[1][0]),:]['SK_ID_CURR'])[1:]
@@ -73,11 +95,19 @@ def find_similar_client(client_id):
 
 
 
-explainer = ClassifierExplainer.from_file('explainer.joblib')
-
-
 
 def get_precision(client_id):
+    
+    """
+    To create dropdowns, we want the option to be in the same order than feature importance by shap values.
+    Since we use local shap values for 1 specific client, we create a function that get the dict of thoose values.
+    We use here the file explainer.joblib as "explainer" as global variable.
+    
+    Parameters
+    ----------
+    client_id (int or str) : client identification number from 'SK_CURR_ID' feature.
+    """
+    
     index_client = int(df.loc[df['SK_ID_CURR'] == int(client_id)].index[0])
     df_importance = explainer.get_contrib_df(index = index_client)
     df_importance['contribution'] = abs(df_importance['contribution'])
@@ -90,6 +120,16 @@ def get_precision(client_id):
 
 
 def client_position(id_client):
+    
+    """
+    Provide an histogramm of all clients predicted probability. Gives the current client position on the hist.
+    
+    Parameters
+    ----------
+    id_client (int or str) : client identification number from 'SK_CURR_ID' feature.
+    """
+    
+    
     data = explainer.get_precision_df()
     index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
     proba_client = explainer.pred_probas()[index_client]
@@ -123,6 +163,24 @@ def client_position(id_client):
 
 
 def update_contrib(ind, tpox, feature_data_scaler):
+    
+    """
+    We will use explainer.joblib created on Projet7-gridsearchs-on-chosen-model (as 'explainer' in this notebook) BUT
+    we used already scaled values to create it (so it .predict / .predict_proba correctly).
+    This function takes the 'explainer.plot_contribution' graph from explainerdashboard and rescale the values from normalised
+    to starting values.
+    
+    Parameters
+    ----------
+    -ind (int) : index of the client (real index, not 'SK_CURR_ID')
+    -tpox (int) : number of feature to take in consideration in explainer.plot_contribution
+    -feature_data_scaler (panda DataFrame) : use 'mean_std_on_columns.csv' as 'feature_data_scaler'
+    
+    Return
+    ----------
+    -Graph (ploty graph) : explainer.plot_contributions with updated values of the features.
+    """
+    
     graph = explainer.plot_contributions(index = ind, topx = tpox).to_dict() 
     new_text = []
     new_text.append(graph['data'][1]['text'][0])
@@ -144,6 +202,24 @@ def update_contrib(ind, tpox, feature_data_scaler):
 
 
 def rescale_pdp(feature, ind, feature_data_scaler):
+    
+    """
+    We will use explainer.joblib created on Projet7-gridsearchs-on-chosen-model (as 'explainer' in this notebook) BUT
+    we used already scaled values to create it (so it .predict / .predict_proba correctly).
+    This function takes the 'explainer.plot_pdp' graph from explainerdashboard and rescale the values from normalised
+    to starting values.
+    
+    Parameters
+    ----------
+    -feature (string) : feature we want to be displayed in the plit.pdp
+    -ind (int) : index of the client (real index, not 'SK_CURR_ID')
+    -feature_data_scaler (panda DataFrame) : use 'mean_std_on_columns.csv' as 'feature_data_scaler'
+    
+    Return
+    ----------
+    -Graph (ploty graph) : explainer.plot_pdp with updated values of the features.
+    """
+    
     graph = explainer.plot_pdp(feature, index = ind).to_dict()
     for i in graph['data']:
         if feature in feature_data_scaler.columns:
@@ -165,6 +241,17 @@ def rescale_pdp(feature, ind, feature_data_scaler):
 
 
 def position_client_feature(id_client, feature, ignore_high_value = False):
+    """
+    Create an histogram of the distribution of a features along all datas. 
+    df is global variable 'data_after_featuring.csv'.
+    feature_scale is global variable 'mean_std_on_columns.csv'
+    
+    Parameter
+    ----------
+    -id_client (int or string) : client identification number from 'SK_CURR_ID' feature.
+    -feature (string) : choosen feature in 'data_after_featuring.csv' columns
+    -ignore_high_value(Bool, default = False) : to ignore outliers (highest values) or not.
+    """
     copy = df.copy()
     copy = copy.sort_values(feature, ascending = False)
     if feature in feature_scale.columns:
@@ -371,6 +458,15 @@ app.layout = html.Div([
 
 ])
 
+
+# App callbacks
+
+# First callback : When clicking on submit button -> 
+#                        -show client predict.proba position in an histogramm of all clients
+#                        -show client general informations 
+#                        -Show client ability to pay the loan (able/unable)
+#                        -maxe 2 buttons visible : show similar clients / Show decision explanation
+
 @app.callback(Output('output_div_1','children'),
               Output('output_div_1','style'),
               Output('tbl', 'data'),
@@ -399,7 +495,10 @@ def update_datatable(id_client, slide, n_clicks,state):
                 {'display': 'block', 'float': 'right','margin': '100px'},
                 client_position(id_client),
                 {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'})
-   
+
+# When the user click on the button "show similar clients" it display :
+#                        -A table with 10 similar clients and their prediction able/unable
+#                        -A dropdown to choose a feature
 
     
 @app.callback(Output('tbl2', 'data'),
@@ -439,7 +538,9 @@ def client_info(id_client, n_clicks, state):
                 {'display' : 'none'}
                )
 
-
+# After choosing a feature in the dropdown, it will show :
+#                  -A short description of the feature
+#                  -An histogramm of the distribution of the feature on all clients, with current client position.
     
     
     
@@ -466,6 +567,9 @@ def featurestuff(dropdown, id_client, n_clicks, state):
                 {'display' : 'none'}
                )
 
+# This callback is applied when clicking on 'get info on predictions' and display :
+#                  -The explainer.plot_contribution with shap values for the client
+#                  -A dropdown to choose a feature to display pdp plot.
     
     
 @app.callback(Output('graph', 'figure'),
@@ -506,6 +610,9 @@ def feature_info(id_client, slide, n_clicks, state):
                 {'display' : 'none'})
     
     
+# This last callback apply the dropdown value choosen on previous callback and shows :
+#                  -The information about the choosen feature
+#                  -the explained.plot_pdp of the selected feature.
     
 @app.callback(Output('graph2','style'),
               Output('graph2','figure'),
@@ -541,6 +648,6 @@ def do_stuff(dropdown, id_client, n_clicks, state):
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(port = 8050, host = '0.0.0.0', debug=False) 
+    app.run_server(port = 8050, host = '0.0.0.0', debug=False)
 # -
 
