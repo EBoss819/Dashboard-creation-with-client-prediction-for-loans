@@ -512,31 +512,32 @@ def update_datatable(id_client, slide, n_clicks,state):
               Input('textbox', 'value'),
               Input('similar_client_button_hide','n_clicks'),
               State('similar_client_button_hide','n_clicks'))
-def client_info(id_client, n_clicks, state):            
-    if n_clicks%2 == 1:                            
-        similar = find_similar_client(id_client)
-        similar = similar.to_dict('records')
-        return (similar,
-                {'display' : 'block', 'textAlign' : 'center'},
-                {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
-                'compare with other clients (click to hide/show)',
-                {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
-                get_precision(id_client),
-                {'display' : 'block', 'textAlign' : 'center'},
-                {'display' : 'block', 'margin-left' : '100px'}
-               )
-    if n_clicks%2 == 0:    
-        similar = find_similar_client(id_client)
-        similar = similar.to_dict('records')
-        return (similar,
-                {'display' : 'none'},
-                {'display' : 'none'},
-                'compare with other clients (click to hide/show)',
-                {'display' : 'none'},
-                get_precision(id_client),
-                {'display' : 'none'},
-                {'display' : 'none'}
-               )
+def client_info(id_client, n_clicks, state):   
+    if n_clicks:
+        if n_clicks%2 == 1:                            
+            similar = find_similar_client(id_client)
+            similar = similar.to_dict('records')
+            return (similar,
+                    {'display' : 'block', 'textAlign' : 'center'},
+                    {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
+                    'compare with other clients (click to hide/show)',
+                    {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
+                    get_precision(id_client),
+                    {'display' : 'block', 'textAlign' : 'center'},
+                    {'display' : 'block', 'margin-left' : '100px'}
+                   )
+        if n_clicks%2 == 0:    
+            similar = find_similar_client(id_client)
+            similar = similar.to_dict('records')
+            return (similar,
+                    {'display' : 'none'},
+                    {'display' : 'none'},
+                    'compare with other clients (click to hide/show)',
+                    {'display' : 'none'},
+                    get_precision(id_client),
+                    {'display' : 'none'},
+                    {'display' : 'none'}
+                   )
 
 # After choosing a feature in the dropdown, it will show :
 #                  -A short description of the feature
@@ -554,17 +555,18 @@ def client_info(id_client, n_clicks, state):
               State('similar_client_button_hide','n_clicks')
              )
 def featurestuff(dropdown, id_client, n_clicks, state):
-    if n_clicks%2 == 1:   
-        return ({'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
-                position_client_feature(id_client, dropdown, True),
-                dff.loc[dff['feature'] == dropdown].iloc[0,1],
-                {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '150px'}
-               )
-    if n_clicks%2 == 0:   
-        return ({'display' : 'none'},
-                position_client_feature(id_client, dropdown, True),
-                dff.loc[dff['feature'] == dropdown].iloc[0,1],
-                {'display' : 'none'}
+    if n_clicks:
+        if n_clicks%2 == 1:   
+            return ({'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
+                    position_client_feature(id_client, dropdown, True),
+                    dff.loc[dff['feature'] == dropdown].iloc[0,1],
+                    {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '150px'}
+                   )
+        if n_clicks%2 == 0:   
+            return ({'display' : 'none'},
+                    position_client_feature(id_client, dropdown, True),
+                    dff.loc[dff['feature'] == dropdown].iloc[0,1],
+                    {'display' : 'none'}
                )
 
 # This callback is applied when clicking on 'get info on predictions' and display :
@@ -585,29 +587,30 @@ def featurestuff(dropdown, id_client, n_clicks, state):
               Input('slider', 'value'),
               Input('info_on_feature_button','n_clicks'),
               State('info_on_feature_button','n_clicks'))
-def feature_info(id_client, slide, n_clicks, state):            
-    if n_clicks%2 == 1:    
-        index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
-        return (update_contrib(index_client, slide, feature_scale),
-                {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
-                {'display' : 'block', 'textAlign' : 'center'},
-                {'display' : 'block', 'margin-right' : '150px', 'margin-left' : '150px'},
-                {'display' : 'block', 'margin-right' : '150px', 'margin-left' : '150px'},
-                {'display' : 'block', 'textAlign' : 'center'},
-                get_precision(id_client),
-               'get infos on prediction (click to hide/show)',
-                {'display' : 'block', 'textAlign' : 'center'})
-    if n_clicks%2 == 0: 
-        index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
-        return (update_contrib(index_client, slide, feature_scale),
-                {'display' : 'none'},
-                {'display' : 'none'},
-                {'display' : 'none'},
-                {'display' : 'none'},
-                {'display' : 'none'},
-                get_precision(id_client),
-                'get infos on prediction (click to hide/show)',
-                {'display' : 'none'})
+def feature_info(id_client, slide, n_clicks, state):      
+    if n_clicks:
+        if n_clicks%2 == 1:    
+            index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
+            return (update_contrib(index_client, slide, feature_scale),
+                    {'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
+                    {'display' : 'block', 'textAlign' : 'center'},
+                    {'display' : 'block', 'margin-right' : '150px', 'margin-left' : '150px'},
+                    {'display' : 'block', 'margin-right' : '150px', 'margin-left' : '150px'},
+                    {'display' : 'block', 'textAlign' : 'center'},
+                    get_precision(id_client),
+                   'get infos on prediction (click to hide/show)',
+                    {'display' : 'block', 'textAlign' : 'center'})
+        if n_clicks%2 == 0: 
+            index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
+            return (update_contrib(index_client, slide, feature_scale),
+                    {'display' : 'none'},
+                    {'display' : 'none'},
+                    {'display' : 'none'},
+                    {'display' : 'none'},
+                    {'display' : 'none'},
+                    get_precision(id_client),
+                    'get infos on prediction (click to hide/show)',
+                    {'display' : 'none'})
     
     
 # This last callback apply the dropdown value choosen on previous callback and shows :
@@ -624,30 +627,31 @@ def feature_info(id_client, slide, n_clicks, state):
               Input('info_on_feature_button','n_clicks'),
               State('info_on_feature_button','n_clicks'))
 def do_stuff(dropdown, id_client, n_clicks, state):
-    if n_clicks%2 == 1:   
-        index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
-        feature_info = dff.loc[dff['feature'] == dropdown].iloc[0,1]
-        return ({'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
-                rescale_pdp(dropdown, index_client, feature_scale),
-                {'display' : 'block', 'margin-left' : '100px'},
-                feature_info,
-                {'display' : 'block', 'margin-left' : '100px'}
-               )
-    if n_clicks%2 == 0:   
-        index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
-        feature_info = dff.loc[dff['feature'] == dropdown].iloc[0,1]
-        return ({'display' : 'none'},
-                rescale_pdp(dropdown, index_client, feature_scale),
-                {'display' : 'none'},
-                feature_info,
-                {'display' : 'none'}
-               )
+    if n_clicks:
+        if n_clicks%2 == 1:   
+            index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
+            feature_info = dff.loc[dff['feature'] == dropdown].iloc[0,1]
+            return ({'display' : 'block', 'margin-right' : '100px', 'margin-left' : '100px'},
+                    rescale_pdp(dropdown, index_client, feature_scale),
+                    {'display' : 'block', 'margin-left' : '100px'},
+                    feature_info,
+                    {'display' : 'block', 'margin-left' : '100px'}
+                   )
+        if n_clicks%2 == 0:   
+            index_client = int(df.loc[df['SK_ID_CURR'] == int(id_client)].index[0])
+            feature_info = dff.loc[dff['feature'] == dropdown].iloc[0,1]
+            return ({'display' : 'none'},
+                    rescale_pdp(dropdown, index_client, feature_scale),
+                    {'display' : 'none'},
+                    feature_info,
+                    {'display' : 'none'}
+                   )
 
 
     
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(port = 8050, host = '0.0.0.0', debug=False)
+    app.run_server(port = 8050, debug=False) # host = '0.0.0.0'
 # -
 
