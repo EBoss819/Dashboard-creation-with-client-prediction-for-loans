@@ -10,11 +10,8 @@ Description of the files :
 -api.py 
 is for the api prediction developpement
 
--class_client.py 
-is the class made for a client with all his features needed for the api
-
--dashapp.ipynb
-is the dash application (wil be changed as .py in the futur)
+-dashapp.py
+is the dash application
 
 -Projet7-featuring.ipynb 
 is the feature ingeneering from the data from kaggle
