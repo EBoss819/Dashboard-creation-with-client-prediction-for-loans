@@ -1,4 +1,4 @@
-utc_time_created: '2023-07-01 21:11:27.318957'
+utc_time_created: '2023-08-02 03:22:24.642284'
 flavors:
   python_function:
     model_path: model.pkl
@@ -13,7 +13,7 @@ flavors:
     sklearn_version: 1.3.0
     serialization_format: cloudpickle
     code: null
-model_uuid: 682bc7090cd5420f9bbc7dffbf973536
+model_uuid: 2a9f03290e6c4279a540d7f9e366db53
 mlflow_version: 2.4.0
 signature:
   inputs: '[{"type": "long", "name": "CODE_GENDER"}, {"type": "long", "name": "FLAG_OWN_CAR"},

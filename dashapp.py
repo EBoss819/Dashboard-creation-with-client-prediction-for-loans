@@ -652,6 +652,4 @@ def do_stuff(dropdown, id_client, n_clicks, state):
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(port = 8050, debug=False) # host = '0.0.0.0'
-# -
-
+    app.run_server(port = 8050,host = '0.0.0.0', debug=False) 

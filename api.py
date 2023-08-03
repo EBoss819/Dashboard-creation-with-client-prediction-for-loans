@@ -21,8 +21,6 @@ import pandas as pd
 import numpy as np
 import uvicorn
 
-app = FastAPI()
-
 class Individual(BaseModel):
     CODE_GENDER: float
     FLAG_OWN_CAR: float
@@ -461,9 +459,9 @@ class Individual(BaseModel):
     INSTAL_COUNT : float
 
 
+app = FastAPI()
 
-
-with open("final_model/model.pkl", "rb") as f:
+with open("./final_model/model.pkl", "rb") as f:
     model = pickle.load(f)
 
 
@@ -473,9 +471,9 @@ def scoring_endpoint(item:Individual = None):
     dico = item.dict()
     df = pd.DataFrame([dico.values()], columns= dico.keys())
     pred = model.predict(df)[0]
+    pred_proba = model.predict_proba(df)[0]
     if pred == 0:
         return {"prediction" : 'Unable'}
     if pred == 1:
         return {"prediction" : 'Able'}
-
 
