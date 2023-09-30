@@ -7,8 +7,7 @@ The data come from kaggle : https://www.kaggle.com/c/home-credit-default-risk/da
 Description of the files :
 
 -api.py 
-is for the api prediction developpement
-
+is for the api used for prediction
 -dashapp.py
 is the dash application
 
