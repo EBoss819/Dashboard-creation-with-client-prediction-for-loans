@@ -3,12 +3,14 @@
 
 The purpose of this project is to create an dashboard environement for a bank to be able to use their data to decide whether to grant credit to its customers.
 The data come from kaggle : https://www.kaggle.com/c/home-credit-default-risk/data
-The API and dashapp was running in a VM and was accessible through the web (for potential bank employee to use it).
 
 Description of the files :
+The first 2 files will be deployed in an online VM with all the required data.
+The needed data and scripts on the VM are updated on VM reboot.
 
 -api.py 
 is for the api used for prediction
+
 -dashapp.py
 is the dash application
 
